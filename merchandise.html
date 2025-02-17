@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Waste Management - Eco Merchandise</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* Merchandise Section Styles */
+        .merchandise-section {
+            flex: 1;
+            padding: 20px;
+            background: #f8f9fa;
+            min-height: 100vh;
+        }
+
+        .merch-header {
+            background: linear-gradient(135deg, #2d5a27 0%, #1a4314 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .tagline {
+            font-size: 1.2em;
+            margin: 15px 0;
+            opacity: 0.9;
+        }
+
+        .impact-display {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 25px;
+            display: inline-block;
+            margin: 15px 0;
+        }
+
+        .order-progress {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 30px;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.7);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active {
+            color: white;
+        }
+
+        .progress-step.active i {
+            color: #4CAF50;
+            transform: scale(1.2);
+        }
+
+        .progress-step i {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .progress-line {
+            width: 50px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.3);
+            margin: 0 15px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active + .progress-line {
+            background: #4CAF50;
+        }
+
+        .merch-categories {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .category-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            background: white;
+            color: #2d5a27;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .category-btn.active {
+            background: #2d5a27;
+            color: white;
+        }
+
+        .merch-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            padding: 20px 0;
+        }
+
+        .merch-item {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .merch-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .merch-image {
+            position: relative;
+            padding-top: 100%;
+            background: #f8f9fa;
+        }
+
+        .merch-image img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .eco-impact {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(45, 90, 39, 0.9);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.9em;
+        }
+
+        .merch-details {
+            padding: 20px;
+        }
+
+        .merch-details h3 {
+            margin: 0 0 10px 0;
+            color: #2c3e50;
+        }
+
+        .impact-cost {
+            color: #2d5a27;
+            font-weight: bold;
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(76, 175, 80, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .impact-cost i {
+            color: #4CAF50;
+        }
+
+        .redeem-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: #2d5a27;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .redeem-btn:hover {
+            background: #234a1f;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: white;
+            margin: 50px auto;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 20px;
+            position: relative;
+            animation: modalSlideIn 0.3s ease-out;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(-30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            padding: 25px 30px;
+            border-bottom: 1px solid #eee;
+            position: relative;
+        }
+
+        .modal-header h2 {
+            color: #2d5a27;
+            font-size: 1.8em;
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .impact-summary {
+            display: inline-block;
+            background: rgba(45, 90, 39, 0.1);
+            padding: 8px 20px;
+            border-radius: 25px;
+            color: #2d5a27;
+            font-weight: 500;
+            margin-top: 15px;
+        }
+
+        .close {
+            position: absolute;
+            right: 25px;
+            top: 25px;
+            font-size: 24px;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .close:hover {
+            background: rgba(0, 0, 0, 0.05);
+            transform: rotate(90deg);
+        }
+
+        .checkout-step {
+            padding: 30px;
+        }
+
+        .checkout-step h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e1e1;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            border-color: #2d5a27;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(45, 90, 39, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .continue-btn, .place-order-btn {
+            width: 100%;
+            padding: 15px;
+            background: #2d5a27;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .continue-btn:hover, .place-order-btn:hover {
+            background: #234a1f;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(45, 90, 39, 0.2);
+        }
+
+        /* Confirmation Step Styles */
+        .order-summary {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+        }
+
+        .selected-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e1e1e1;
+            margin-bottom: 20px;
+        }
+
+        .selected-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .item-details h4 {
+            color: #2c3e50;
+            margin: 0 0 5px 0;
+            font-size: 1.2em;
+        }
+
+        .shipping-summary {
+            padding: 20px 0;
+            border-bottom: 1px solid #e1e1e1;
+        }
+
+        .shipping-summary h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .points-summary {
+            padding: 20px 0;
+            color: #2c3e50;
+        }
+
+        .points-summary p {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        @media (max-width: 768px) {
+            .merchandise-section {
+                padding: 10px;
+            }
+
+            .merch-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                margin: 20px;
+                width: auto;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .checkout-step {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="merchandise-section">
+        <div class="merch-header">
+            <h1>Eco Merchandise Store</h1>
+            <p class="tagline">Recycle & Redeem – Get Exclusive Merch at Zero Cost!</p>
+            <div class="impact-display">
+                <i class="fas fa-leaf"></i>
+                Your Environmental Impact: <span id="userCurrentImpact">0</span> kg CO₂
+            </div>
+            <div class="order-progress">
+                <div class="progress-step active">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>Choose</span>
+                </div>
+                <div class="progress-line"></div>
+                <div class="progress-step">
+                    <i class="fas fa-gift"></i>
+                    <span>Redeem</span>
+                </div>
+                <div class="progress-line"></div>
+                <div class="progress-step">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Address</span>
+                </div>
+                <div class="progress-line"></div>
+                <div class="progress-step">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Confirm</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="merch-categories">
+            <button class="category-btn active" data-category="all">All Items</button>
+            <button class="category-btn" data-category="apparel">Apparel</button>
+            <button class="category-btn" data-category="accessories">Accessories</button>
+            <button class="category-btn" data-category="bags">Bags</button>
+            <button class="category-btn" data-category="stationery">Stationery</button>
+            <button class="category-btn" data-category="bottles">Bottles</button>
+        </div>
+
+        <div class="merch-grid">
+            <!-- Apparel -->
+            <div class="merch-item" data-category="apparel">
+                <div class="merch-image">
+                    <img src="Assets/Hoodie.jpg" alt="Eco Hoodie">
+                    <div class="eco-impact">Saves 25kg CO₂</div>
+                </div>
+                <div class="merch-details">
+                    <h3>Recycled Eco Hoodie</h3>
+                    <p>100% recycled cotton blend</p>
+                    <div class="impact-cost">
+                        <i class="fas fa-leaf"></i>
+                        Required Impact: 25 kg CO₂
+                    </div>
+                    <button class="redeem-btn" onclick="redeemMerch('hoodie', 25)">Redeem Now</button>
+                </div>
+            </div>
+
+            <!-- Accessories -->
+            <div class="merch-item" data-category="accessories">
+                <div class="merch-image">
+                    <img src="Assets/keychain.jpg" alt="Eco Keychain">
+                    <div class="eco-impact">Saves 5kg CO₂</div>
+                </div>
+                <div class="merch-details">
+                    <h3>Recycled Keychain</h3>
+                    <p>Made from recycled circuit boards</p>
+                    <div class="impact-cost">
+                        <i class="fas fa-leaf"></i>
+                        Required Impact: 5 kg CO₂
+                    </div>
+                    <button class="redeem-btn" onclick="redeemMerch('keychain', 5)">Redeem Now</button>
+                </div>
+            </div>
+
+            <!-- Bags -->
+            <div class="merch-item" data-category="bags">
+                <div class="merch-image">
+                    <img src="Assets/Totebag.jpg" alt="Eco Tote Bag">
+                    <div class="eco-impact">Saves 15kg CO₂</div>
+                </div>
+                <div class="merch-details">
+                    <h3>Eco Tote Bag</h3>
+                    <p>Made from recycled plastic bottles</p>
+                    <div class="impact-cost">
+                        <i class="fas fa-leaf"></i>
+                        Required Impact: 15 kg CO₂
+                    </div>
+                    <button class="redeem-btn" onclick="redeemMerch('totebag', 15)">Redeem Now</button>
+                </div>
+            </div>
+
+            <!-- Stationery -->
+            <div class="merch-item" data-category="stationery">
+                <div class="merch-image">
+                    <img src="Assets/fidgetpen.jpg" alt="Fidget Pen">
+                    <div class="eco-impact">Saves 3kg CO₂</div>
+                </div>
+                <div class="merch-details">
+                    <h3>Eco Fidget Pen</h3>
+                    <p>Made from recycled plastics</p>
+                    <div class="impact-cost">
+                        <i class="fas fa-leaf"></i>
+                        Required Impact: 3 kg CO₂
+                    </div>
+                    <button class="redeem-btn" onclick="redeemMerch('pen', 3)">Redeem Now</button>
+                </div>
+            </div>
+
+            <!-- Bottles -->
+            <div class="merch-item" data-category="bottles">
+                <div class="merch-image">
+                    <img src="Assets/bottle.jpg" alt="Water Bottle">
+                    <div class="eco-impact">Saves 20kg CO₂</div>
+                </div>
+                <div class="merch-details">
+                    <h3>Eco Water Bottle</h3>
+                    <p>Made from recycled stainless steel</p>
+                    <div class="impact-cost">
+                        <i class="fas fa-leaf"></i>
+                        Required Impact: 20 kg CO₂
+                    </div>
+                    <button class="redeem-btn" onclick="redeemMerch('bottle', 20)">Redeem Now</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Checkout Modal -->
+        <div id="checkoutModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Complete Your Order</h2>
+                    <div class="impact-summary">
+                        Your Environmental Impact: <span id="modalUserImpact">0</span> kg CO₂
+                    </div>
+                    <span class="close">&times;</span>
+                </div>
+
+                <div id="addressStep" class="checkout-step">
+                    <h3>Shipping Address</h3>
+                    <form id="addressForm">
+                        <div class="form-group">
+                            <input type="text" id="fullName" placeholder="Full Name" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="streetAddress" placeholder="Street Address" required>
+                        </div>
+                        <div class="form-row">
+                            <input type="text" id="city" placeholder="City" required>
+                            <input type="text" id="state" placeholder="State" required>
+                        </div>
+                        <div class="form-row">
+                            <input type="text" id="zipCode" placeholder="ZIP Code" required>
+                            <input type="tel" id="phone" placeholder="Phone Number" required>
+                        </div>
+                        <button type="submit" class="continue-btn">Continue to Confirmation</button>
+                    </form>
+                </div>
+
+                <div id="confirmationStep" class="checkout-step" style="display: none;">
+                    <h3>Order Confirmation</h3>
+                    <div class="order-summary">
+                        <div class="selected-item">
+                            <img id="confirmItemImage" src="" alt="Selected Item">
+                            <div class="item-details">
+                                <h4 id="confirmItemName"></h4>
+                                <p id="confirmItemPoints"></p>
+                            </div>
+                        </div>
+                        <div class="shipping-summary">
+                            <h4>Shipping To:</h4>
+                            <p id="confirmAddress"></p>
+                        </div>
+                        <div class="points-summary">
+                            <p>Impact Required: <span id="confirmTotalPoints"></span></p>
+                            <p>Remaining Impact: <span id="confirmRemainingPoints"></span></p>
+                        </div>
+                        <button onclick="placeOrder()" class="place-order-btn">Place Order</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    
+    <!-- Your Firebase config and initialization script -->
+    <script src="firebase-config.js"></script>
+
+    <!-- Your merchandise JavaScript code -->
+    <script src="merchandise.js"></script>
+
+    <!-- Add this right before the closing </body> tag -->
+    <script>
+        let userCO2Points = 52.5; // Starting with 52.5kg CO2
+        
+        // Display initial CO2 points
+        document.getElementById('userCurrentImpact').textContent = userCO2Points;
+        document.getElementById('modalUserImpact').textContent = userCO2Points;
+
+        // Function to redeem merchandise
+        function redeemMerch(itemId, requiredPoints) {
+            if (userCO2Points < requiredPoints) {
+                alert(`You need ${requiredPoints} kg CO₂ impact points to redeem this item. You currently have ${userCO2Points.toFixed(1)} kg CO₂.`);
+                return;
+            }
+
+            try {
+                // Show confirmation modal
+                const modal = document.getElementById('checkoutModal');
+                modal.style.display = 'block';
+
+                // Update confirmation details
+                document.getElementById('confirmItemName').textContent = document.querySelector(`[onclick="redeemMerch('${itemId}', ${requiredPoints})"]`)
+                    .closest('.merch-item')
+                    .querySelector('h3').textContent;
+                document.getElementById('confirmTotalPoints').textContent = `${requiredPoints} kg CO₂`;
+                document.getElementById('confirmRemainingPoints').textContent = `${(userCO2Points - requiredPoints).toFixed(1)} kg CO₂`;
+
+                // Store selected item details for order placement
+                window.selectedItem = {
+                    itemId: itemId,
+                    requiredPoints: requiredPoints
+                };
+
+            } catch (error) {
+                console.error("Error during redemption:", error);
+                alert('An error occurred during redemption. Please try again.');
+            }
+        }
+
+        // Function to place the order
+        function placeOrder() {
+            if (!window.selectedItem) return;
+
+            try {
+                // Get form data
+                const fullName = document.getElementById('fullName').value;
+                const streetAddress = document.getElementById('streetAddress').value;
+                const city = document.getElementById('city').value;
+                const state = document.getElementById('state').value;
+                const zipCode = document.getElementById('zipCode').value;
+                const phone = document.getElementById('phone').value;
+
+                // Update user's CO2 points
+                userCO2Points -= window.selectedItem.requiredPoints;
+                
+                // Update displays
+                document.getElementById('userCurrentImpact').textContent = userCO2Points.toFixed(1);
+                document.getElementById('modalUserImpact').textContent = userCO2Points.toFixed(1);
+                
+                // Close modal and show success message
+                document.getElementById('checkoutModal').style.display = 'none';
+                alert('Order placed successfully! You will receive a confirmation email shortly.');
+                
+                // Reset form
+                document.getElementById('addressForm').reset();
+
+            } catch (error) {
+                console.error("Error placing order:", error);
+                alert('An error occurred while placing your order. Please try again.');
+            }
+        }
+
+        // Close modal when clicking the close button or outside the modal
+        document.querySelector('.close').onclick = function() {
+            document.getElementById('checkoutModal').style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('checkoutModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Handle address form submission
+        document.getElementById('addressForm').onsubmit = function(e) {
+            e.preventDefault();
+            document.getElementById('addressStep').style.display = 'none';
+            document.getElementById('confirmationStep').style.display = 'block';
+            
+            // Update confirmation address
+            const addressString = `${document.getElementById('fullName').value}, ${document.getElementById('streetAddress').value}, ${document.getElementById('city').value}, ${document.getElementById('state').value} ${document.getElementById('zipCode').value}`;
+            document.getElementById('confirmAddress').textContent = addressString;
+        }
+    </script>
+</body>
+</html>
