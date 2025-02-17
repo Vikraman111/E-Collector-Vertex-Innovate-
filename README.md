@@ -7,7 +7,7 @@ Step 3 : Run app.py file<br>
 Step 4 : Open auth.html in live server and replicate the page in incognito tab<br>
 Step 5 : Use `Vikraman@gmail.com` & `123456` (Username & password) for the User - End <br>
 Step 6 : Use `tech@gmail.com` & `123456` (Username & password) for the Technician End<br>
-Step 7 : Use the features in the app & refer to video sent to Mr. Alwin.<br><br><br>
+Step 7 : Use the features in the app & refer to the video attatched in the submission form .<br><br><br>
 
 
 Thank you
